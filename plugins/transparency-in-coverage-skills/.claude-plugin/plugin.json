@@ -1,0 +1,10 @@
+{
+  "name": "transparency-in-coverage-skills",
+  "version": "0.1.0",
+  "description": "Skills for working with CMS Transparency in Coverage (TiC) machine-readable in-network rate files. Includes a tic-lookup skill that indexes pre-filtered payer JSON files into SQLite and answers payer/plan/NPI/CPT rate questions.",
+  "author": {
+    "name": "INOV8"
+  },
+  "keywords": ["transparency-in-coverage", "tic", "healthcare", "price-transparency", "cms", "in-network-rates", "payer", "cpt", "npi"],
+  "license": "MIT"
+}

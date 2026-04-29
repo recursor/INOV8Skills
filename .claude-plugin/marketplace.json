@@ -4,7 +4,7 @@
     "name": "INOV8"
   },
   "metadata": {
-    "description": "INOV8's collection of Claude Code plugins for process knowledge capture and operational excellence",
+    "description": "INOV8's collection of Claude plugins",
     "version": "0.1.0"
   },
   "plugins": [
@@ -15,6 +15,14 @@
       "version": "0.1.0",
       "category": "knowledge-management",
       "tags": ["interview", "process", "sop", "knowledge-transfer", "documentation"]
+    },
+    {
+      "name": "transparency-in-coverage-skills",
+      "source": "./plugins/transparency-in-coverage-skills",
+      "description": "Skills for indexing and querying CMS Transparency in Coverage (TiC) in-network rate files by payer, plan, NPI, and CPT/HCPCS code",
+      "version": "0.1.0",
+      "category": "healthcare",
+      "tags": ["transparency-in-coverage", "tic", "healthcare", "price-transparency", "cms", "rates"]
     }
   ]
 }
