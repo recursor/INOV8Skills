@@ -6,7 +6,10 @@ Indexes CMS machine-readable In-Network JSON files into a SQLite database,
 then provides fast lookups by Payer / Plan / NPI / CPT code.
 
 Usage:
-    # Build the index (run once, or when files change)
+    # Download source files (conditional GET, skips files already up to date)
+    python tic_lookup.py --download
+
+    # Build the index (auto-downloads any missing source files first)
     python tic_lookup.py --build
 
     # Query examples
@@ -31,6 +34,8 @@ import json
 import os
 import sqlite3
 import sys
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 SCRIPT_DIR    = Path(__file__).resolve().parent
@@ -38,6 +43,98 @@ INNETWORK_DIR = SCRIPT_DIR / "InNetwork"
 NPI_DIR       = SCRIPT_DIR / "NPI"
 _default_db   = SCRIPT_DIR / "tic_index.db"
 DB_PATH       = Path(os.environ.get("TIC_DB_PATH", str(_default_db)))
+
+TIC_BASE_URL = os.environ.get(
+    "TIC_DATA_URL",
+    "https://inov8public.z21.web.core.windows.net/Insurance/",
+)
+TIC_FILES = [
+    "InNetwork/Aetna/AetnaEPO.json",
+    "InNetwork/Aetna/AetnaPPO.json",
+    "InNetwork/BCBS/BCBSTX_HMO.json",
+    "InNetwork/BCBS/BCBSTX_PPO.json",
+    "InNetwork/Cigna/CignaPPO.json",
+    "InNetwork/Cigna/CignaSouthTXHMO.json",
+    "InNetwork/UHC/UnitedHMO.json",
+    "InNetwork/UHC/UnitedPPO.json",
+    "NPI/houstonmetro.csv",
+]
+CACHE_PATH = SCRIPT_DIR / ".tic-cache.json"
+
+# -----------------------------------------------------------------------
+# DOWNLOAD
+# -----------------------------------------------------------------------
+
+def _human_size(n):
+    n = float(n)
+    for unit in ("B", "KB", "MB", "GB"):
+        if n < 1024:
+            return "%.1f %s" % (n, unit)
+        n /= 1024
+    return "%.1f TB" % n
+
+def _load_cache():
+    if not CACHE_PATH.exists():
+        return {}
+    try:
+        with open(CACHE_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+def _save_cache(cache):
+    with open(CACHE_PATH, "w", encoding="utf-8") as f:
+        json.dump(cache, f, indent=2, sort_keys=True)
+
+def _download_one(rel_path, cache, force=False):
+    """Fetch one file with conditional GET. Returns 'updated', 'unchanged', or 'error'."""
+    url  = TIC_BASE_URL.rstrip("/") + "/" + rel_path
+    dest = SCRIPT_DIR / rel_path
+    dest.parent.mkdir(parents=True, exist_ok=True)
+
+    req = urllib.request.Request(url)
+    if not force and dest.exists():
+        meta = cache.get(rel_path, {})
+        if meta.get("etag"):
+            req.add_header("If-None-Match", meta["etag"])
+        if meta.get("last_modified"):
+            req.add_header("If-Modified-Since", meta["last_modified"])
+
+    try:
+        with urllib.request.urlopen(req) as resp:
+            data = resp.read()
+            etag = resp.headers.get("ETag")
+            lm   = resp.headers.get("Last-Modified")
+            tmp  = dest.with_suffix(dest.suffix + ".part")
+            with open(tmp, "wb") as f:
+                f.write(data)
+            os.replace(tmp, dest)
+            cache[rel_path] = {"etag": etag, "last_modified": lm}
+            print("  %-44s  updated  (%s)" % (rel_path, _human_size(len(data))))
+            return "updated"
+    except urllib.error.HTTPError as e:
+        if e.code == 304:
+            print("  %-44s  up to date" % rel_path)
+            return "unchanged"
+        print("  %-44s  ERROR: HTTP %s" % (rel_path, e.code), file=sys.stderr)
+        return "error"
+    except urllib.error.URLError as e:
+        print("  %-44s  ERROR: %s" % (rel_path, e.reason), file=sys.stderr)
+        return "error"
+
+def download_all(force=False):
+    print("Downloading TiC source files from %s" % TIC_BASE_URL)
+    cache = _load_cache()
+    counts = {"updated": 0, "unchanged": 0, "error": 0}
+    for rel in TIC_FILES:
+        counts[_download_one(rel, cache, force=force)] += 1
+    _save_cache(cache)
+    print("\n%d updated, %d unchanged, %d error(s)." %
+          (counts["updated"], counts["unchanged"], counts["error"]))
+    return counts["error"] == 0
+
+def _missing_source_files():
+    return [rel for rel in TIC_FILES if not (SCRIPT_DIR / rel).exists()]
 
 # -----------------------------------------------------------------------
 # BUILD
@@ -166,6 +263,13 @@ def index_file(conn, json_path, payer, plan):
     print("    -> %s price rows" % "{:,}".format(len(rows)))
 
 def build_index():
+    missing = _missing_source_files()
+    if missing:
+        print("%d source file(s) missing — fetching first..." % len(missing))
+        if not download_all(force=False):
+            print("Some downloads failed. Aborting build.", file=sys.stderr)
+            sys.exit(1)
+        print("")
     print("Building index -> %s" % DB_PATH)
     conn = sqlite3.connect(str(DB_PATH))
     conn.execute("PRAGMA journal_mode=WAL")
@@ -302,7 +406,9 @@ def list_available(field):
 def main():
     p = argparse.ArgumentParser(description="TiC In-Network Price Lookup",
         formatter_class=argparse.RawDescriptionHelpFormatter, epilog=__doc__)
-    p.add_argument("--build", action="store_true", help="Rebuild SQLite index from JSON files")
+    p.add_argument("--build", action="store_true", help="Rebuild SQLite index (auto-downloads missing source files)")
+    p.add_argument("--download", action="store_true", help="Download source files (conditional GET via ETag/Last-Modified)")
+    p.add_argument("--force", action="store_true", help="With --download, re-fetch files even if up to date")
     p.add_argument("--payer", type=str, help="Filter by payer (folder name)")
     p.add_argument("--plan", type=str, help="Filter by plan (file stem)")
     p.add_argument("--npi", type=str, help="Filter by NPI number")
@@ -316,6 +422,9 @@ def main():
     p.add_argument("--list-cpts", action="store_true", help="List available CPT codes")
     args = p.parse_args()
 
+    if args.download:
+        ok = download_all(force=args.force)
+        sys.exit(0 if ok else 1)
     if args.build:
         build_index()
         return

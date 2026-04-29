@@ -16,56 +16,73 @@ description: >
 
 ## What This Skill Does
 
-This skill indexes and queries CMS Transparency in Coverage (TiC) machine-readable
-In-Network JSON files. It builds a SQLite database from pre-filtered JSON files organized
-by payer/plan, then provides fast lookups by any combination of Payer, Plan, NPI, and
-CPT/HCPCS code.
+This skill downloads, indexes, and queries CMS Transparency in Coverage (TiC)
+machine-readable In-Network JSON files. It pulls a pre-filtered set of payer
+files (Aetna, BCBS, Cigna, UHC) and an NPI registry from INOV8's public mirror,
+builds a SQLite database, then provides fast lookups by any combination of
+Payer, Plan, NPI, and CPT/HCPCS code.
 
 ## Data Layout
 
-The skill expects data in the user's workspace folder with this structure:
+The script downloads and uses the following layout in its own directory:
 
 ```
 <workspace>/
+├── tic-lookup.py         # The query tool (copy from this skill's assets/)
+├── .tic-cache.json       # ETag/Last-Modified cache for conditional GET
 ├── InNetwork/
-│   ├── <Payer>/          # e.g., Aetna, BCBS, Cigna, UHC
-│   │   ├── <Plan>.json   # e.g., AetnaEPO.json, AetnaPPO.json
-│   │   └── ...
-│   └── ...
-├── NPI/
-│   └── *.csv             # NPI registry exports (from NPPES)
-└── tic_lookup.py          # The query tool (copy from scripts/ if not present)
+│   ├── Aetna/            # AetnaEPO.json, AetnaPPO.json
+│   ├── BCBS/             # BCBSTX_HMO.json, BCBSTX_PPO.json
+│   ├── Cigna/            # CignaPPO.json, CignaSouthTXHMO.json
+│   └── UHC/              # UnitedHMO.json, UnitedPPO.json
+└── NPI/
+    └── houstonmetro.csv  # NPI registry export (NPPES, Houston metro)
 ```
 
-The JSON files follow the CMS TiC schema (v2.0) and should already be filtered to the
-CPTs and provider NPIs of interest — raw TiC files from insurers can be hundreds of GB.
+The source files are mirrored from
+`https://inov8public.z21.web.core.windows.net/Insurance/tic.htm`. They are
+already filtered to the CPTs and provider NPIs of interest — raw TiC files
+from insurers can be hundreds of GB. Override the source URL with the
+`TIC_DATA_URL` env var if needed.
 
 ## How to Use
 
-### Step 1: Ensure tic_lookup.py Is in the Workspace
+### Step 1: Place tic-lookup.py in the Workspace
 
-If the user's workspace doesn't have `tic_lookup.py`, copy it from this skill's
-`scripts/` directory:
+Copy `tic-lookup.py` from this skill's `assets/` directory into the workspace
+where the data should live:
 
 ```bash
-cp <skill-path>/scripts/tic_lookup.py <workspace>/tic_lookup.py
+cp <skill-path>/assets/tic-lookup.py <workspace>/tic-lookup.py
 ```
 
 ### Step 2: Build the Index
 
-The SQLite index must be built before querying. Run:
+`--build` will automatically download any missing source files first, then build
+the SQLite index:
 
 ```bash
 cd <workspace>
-python3 tic_lookup.py --build
+python3 tic-lookup.py --build
 ```
+
+To download (or refresh) the source files without rebuilding the index:
+
+```bash
+python3 tic-lookup.py --download           # conditional GET, skips up-to-date files
+python3 tic-lookup.py --download --force   # re-fetch everything
+```
+
+`--download` uses HTTP `If-None-Match` / `If-Modified-Since` (ETag and
+Last-Modified are cached in `.tic-cache.json`), so re-running it is cheap and
+only refetches files that actually changed on the mirror.
 
 **Important:** In sandboxed environments where the mounted workspace doesn't support
 SQLite WAL mode, set the `TIC_DB_PATH` environment variable to write the database to
 a writable location:
 
 ```bash
-TIC_DB_PATH=/tmp/tic_index.db python3 tic_lookup.py --build
+TIC_DB_PATH=/tmp/tic_index.db python3 tic-lookup.py --build
 ```
 
 Then use that same env var for all subsequent queries.
@@ -78,27 +95,27 @@ Common query patterns:
 
 ```bash
 # Look up rates for a specific CPT code
-python3 tic_lookup.py --cpt 27447 --nonzero
+python3 tic-lookup.py --cpt 27447 --nonzero
 
 # Look up rates for a specific provider (by NPI)
-python3 tic_lookup.py --npi 1831551266 --nonzero
+python3 tic-lookup.py --npi 1831551266 --nonzero
 
 # Filter by payer and CPT
-python3 tic_lookup.py --payer Aetna --cpt 27447 --nonzero
+python3 tic-lookup.py --payer Aetna --cpt 27447 --nonzero
 
 # Full filter: payer + plan + NPI + CPT
-python3 tic_lookup.py --payer Aetna --plan AetnaEPO --npi 1831551266 --cpt 27447
+python3 tic-lookup.py --payer Aetna --plan AetnaEPO --npi 1831551266 --cpt 27447
 
 # Summary view (min/max/avg per plan)
-python3 tic_lookup.py --cpt 27447 --summary
+python3 tic-lookup.py --cpt 27447 --summary
 
 # Export to CSV for further analysis
-python3 tic_lookup.py --cpt 27447 --nonzero --csv results.csv
+python3 tic-lookup.py --cpt 27447 --nonzero --csv results.csv
 
 # List what's available
-python3 tic_lookup.py --list-payers
-python3 tic_lookup.py --list-plans
-python3 tic_lookup.py --list-cpts
+python3 tic-lookup.py --list-payers
+python3 tic-lookup.py --list-plans
+python3 tic-lookup.py --list-cpts
 ```
 
 ### Key Concepts
@@ -177,3 +194,8 @@ payer TiC files for the selected CPT codes and geographic area.
 
 **Zero-dollar rates** — Many TiC entries include $0 placeholder rates. Use `--nonzero`
 to filter these out, or `--summary` which automatically excludes them.
+
+**Download fails / 403 / network unreachable** — The default mirror is
+`https://inov8public.z21.web.core.windows.net/Insurance/`. To use a different
+source, set `TIC_DATA_URL` to a base URL that serves the same `InNetwork/...`
+and `NPI/...` relative paths. Re-run `--download` to confirm.
