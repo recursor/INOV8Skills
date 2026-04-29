@@ -1,0 +1,20 @@
+{
+  "name": "inov8-plugins",
+  "owner": {
+    "name": "INOV8"
+  },
+  "metadata": {
+    "description": "INOV8's collection of Claude Code plugins for process knowledge capture and operational excellence",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "inov8-process-skills",
+      "source": "./plugins/inov8-process-skills",
+      "description": "Skills for capturing and structuring business process knowledge from subject-matter experts",
+      "version": "0.1.0",
+      "category": "knowledge-management",
+      "tags": ["interview", "process", "sop", "knowledge-transfer", "documentation"]
+    }
+  ]
+}
