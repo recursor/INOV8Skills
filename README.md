@@ -58,6 +58,26 @@ To see what's available without installing:
 - "look up in-network rates for [payer/plan/NPI]"
 - Anything mentioning TiC files, price transparency, or negotiated rates
 
+### `inov8-exchange-skills`
+
+- **Version:** 0.1.0
+- **Category:** productivity
+- **Description:** MCP server and skills for interacting with on-premises Microsoft Exchange accounts via Exchange Web Services (EWS). Bundles a Docker-based MCP server (`ghcr.io/recursor/exchangemcpserver`) and setup skills that keep credentials in a per-user config file outside the plugin directory.
+
+**Skills:**
+
+- **[`exchange-setup`](plugins/inov8-exchange-skills/skills/exchange-setup/SKILL.md)** — Creates `~/.inov8/exchange-mcp/config.json` from a bundled template and opens it in the user's editor. Designed so credentials never enter Claude's conversation context.
+- **[`exchange-add-account`](plugins/inov8-exchange-skills/skills/exchange-add-account/SKILL.md)** — Prints a blank account stanza and re-opens the config for the user to paste in.
+
+**Example trigger phrases:**
+
+- `/exchange-setup`
+- "set up exchange" / "configure my exchange account"
+- `/exchange-add-account`
+- "add another exchange mailbox"
+
+**Prerequisites:** Docker (Desktop, Colima, or Engine) and network access to your Exchange server. See the [plugin README](plugins/inov8-exchange-skills/README.md) for full setup instructions.
+
 ## Repository layout
 
 ```text
@@ -68,9 +88,16 @@ INOV8Skills/
 │   ├── inov8-process-skills/
 │   │   ├── .claude-plugin/plugin.json
 │   │   └── skills/process-interview/SKILL.md
-│   └── transparency-in-coverage-skills/
+│   ├── transparency-in-coverage-skills/
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── skills/tic-lookup/SKILL.md
+│   └── inov8-exchange-skills/
 │       ├── .claude-plugin/plugin.json
-│       └── skills/tic-lookup/SKILL.md
+│       ├── .mcp.json                    # Registers the Exchange MCP server
+│       ├── docker/                      # Compose file + config template
+│       └── skills/
+│           ├── exchange-setup/SKILL.md
+│           └── exchange-add-account/SKILL.md
 ├── docs/
 │   └── braindump.md                        # Background reading on tacit-knowledge extraction
 └── README.md

@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "exchange": {
+      "command": "docker",
+      "args": [
+        "compose",
+        "-f", "${CLAUDE_PLUGIN_ROOT}/docker/docker-compose.mcp.yaml",
+        "run", "--rm", "-T",
+        "exchange-mcp"
+      ]
+    }
+  }
+}
