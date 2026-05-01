@@ -58,25 +58,37 @@ To see what's available without installing:
 - "look up in-network rates for [payer/plan/NPI]"
 - Anything mentioning TiC files, price transparency, or negotiated rates
 
-### `inov8-exchange-skills`
+## Microsoft Exchange (Claude Desktop)
 
-- **Version:** 0.1.0
-- **Category:** productivity
-- **Description:** MCP server and skills for interacting with on-premises Microsoft Exchange accounts via Exchange Web Services (EWS). Bundles a Docker-based MCP server (`ghcr.io/recursor/exchangemcpserver`) and setup skills that keep credentials in a per-user config file outside the plugin directory.
+Connect Claude Desktop to an on-premises Microsoft Exchange mailbox so chat and cowork can read mail, search the calendar, manage tasks, and look up contacts. Distributed as a Claude Desktop extension (`.mcpb`) — no terminal, no Docker, no Python install required. Claude Desktop manages the runtime; your password is stored in the OS keychain.
 
-**Skills:**
+### Install
 
-- **[`exchange-setup`](plugins/inov8-exchange-skills/skills/exchange-setup/SKILL.md)** — Creates `~/.inov8/exchange-mcp/config.json` from a bundled template and opens it in the user's editor. Designed so credentials never enter Claude's conversation context.
-- **[`exchange-add-account`](plugins/inov8-exchange-skills/skills/exchange-add-account/SKILL.md)** — Prints a blank account stanza and re-opens the config for the user to paste in.
+1. Download [`exchange-mcp-server-latest.mcpb`](https://inov8public.z21.web.core.windows.net/ExchangeMCP/exchange-mcp-server-latest.mcpb).
+2. In Claude Desktop, open **Settings → Extensions** and drag the `.mcpb` file onto the window.
+3. Fill in the form fields and click **Install**. The Exchange tools become available in chat and cowork immediately.
 
-**Example trigger phrases:**
+### What you'll need
 
-- `/exchange-setup`
-- "set up exchange" / "configure my exchange account"
-- `/exchange-add-account`
-- "add another exchange mailbox"
+| Field | Example | Notes |
+| --- | --- | --- |
+| Exchange server | `mail.contoso.com` | Hostname only — no `https://` |
+| Email address | `you@contoso.com` | Your full email |
+| Windows username | `jdoe` | Without the domain prefix |
+| Windows domain (NETBIOS) | `CONTOSO` | The short AD/NETBIOS name |
+| Password | — | Stored in the OS keychain |
+| Verify SSL | `true` | Set to `false` only for self-signed certs |
+| Timezone (IANA) | `America/Chicago` | Defaults to `UTC` |
 
-**Prerequisites:** Docker (Desktop, Colima, or Engine) and network access to your Exchange server. See the [plugin README](plugins/inov8-exchange-skills/README.md) for full setup instructions.
+### Multiple mailboxes
+
+Leave the single-account fields blank and set **Multi-account config file** to the absolute path of a `config.json` whose `accounts` array describes each mailbox. See the schema in the [`ExchangeMCPServer` README](https://github.com/recursor/ExchangeMCPServer#readme).
+
+### Source and support
+
+The extension is built from [`recursor/ExchangeMCPServer`](https://github.com/recursor/ExchangeMCPServer). Report issues there.
+
+> **Claude Code users:** Claude Desktop and Claude Code use separate MCP configurations. To use the same Exchange server in Claude Code, register the `uv` invocation in your Claude Code MCP config — see the [`ExchangeMCPServer` README](https://github.com/recursor/ExchangeMCPServer#readme) for the command. There is no Exchange plugin in this marketplace.
 
 ## Repository layout
 
@@ -88,16 +100,9 @@ INOV8Skills/
 │   ├── inov8-process-skills/
 │   │   ├── .claude-plugin/plugin.json
 │   │   └── skills/process-interview/SKILL.md
-│   ├── transparency-in-coverage-skills/
-│   │   ├── .claude-plugin/plugin.json
-│   │   └── skills/tic-lookup/SKILL.md
-│   └── inov8-exchange-skills/
+│   └── transparency-in-coverage-skills/
 │       ├── .claude-plugin/plugin.json
-│       ├── .mcp.json                    # Registers the Exchange MCP server
-│       ├── docker/                      # Compose file + config template
-│       └── skills/
-│           ├── exchange-setup/SKILL.md
-│           └── exchange-add-account/SKILL.md
+│       └── skills/tic-lookup/SKILL.md
 ├── docs/
 │   └── braindump.md                        # Background reading on tacit-knowledge extraction
 └── README.md

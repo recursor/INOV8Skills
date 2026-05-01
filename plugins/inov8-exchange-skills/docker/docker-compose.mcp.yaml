@@ -1,8 +1,0 @@
-services:
-  exchange-mcp:
-    image: ghcr.io/recursor/exchangemcpserver:latest
-    pull_policy: missing
-    stdin_open: true
-    tty: false
-    volumes:
-      - "${HOME:-${USERPROFILE}}/.inov8/exchange-mcp/config.json:/app/config.json:ro"
