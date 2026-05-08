@@ -18,6 +18,8 @@ The skill is finished when the user has run the three verification prompts in St
 
 The Exchange MCP server is a Claude Desktop extension that lets Claude read mail, calendar, tasks, and contacts from INOV8's on-prem Microsoft Exchange server (`mail.inov8hc.com`) over EWS, using NTLM/Windows authentication. Once installed, the user can ask Claude things like *"what meetings do I have today?"* or *"draft a reply to Sarah's last email"*. 18 tools across email, calendar, tasks, and contacts.
 
+**Where the tools show up.** Both Claude Desktop **chat** and **cowork** share the same desktop-extension registry, so installing the `.mcpb` once makes the Exchange tools available in both modes. They do **not** show up in **Claude Code**, even when Claude Code is launched from inside Claude Desktop — Claude Code uses a separate MCP config (`~/.claude.json` / `.mcp.json` / `claude mcp add`). For the Claude Code path, see the [`ExchangeMCPServer` README](https://github.com/recursor/ExchangeMCPServer#readme) for the `uv` invocation to register manually.
+
 ## Prerequisites
 
 - **Claude Desktop installed.** Not Claude Code (CLI), not claude.ai, not the web UI. The `.mcpb` format only works in Claude Desktop. macOS, Windows, and Linux all supported.
@@ -30,15 +32,24 @@ One file works on macOS, Windows, and Linux:
 
 <https://inov8public.z21.web.core.windows.net/ExchangeMCP/exchange-mcp-server-latest.mcpb>
 
-## Step 2 — Side-load warnings
+## Step 2 — Install via Settings → Extensions
 
-- **macOS:** Gatekeeper may quarantine the file. Right-click → **Open** the first time, or approve via **System Settings → Privacy & Security → Open Anyway**.
-- **Windows:** SmartScreen may show *"Windows protected your PC"* for an unknown publisher. Click **More info → Run anyway**.
-- **Linux:** No warning expected.
+The reliable cross-platform method — and the only method on Windows, where Claude Desktop does **not** register the `.mcpb` file association, so double-clicking does nothing:
 
-## Step 3 — Install
+1. Open **Claude Desktop**.
+2. Go to **Settings → Extensions** (on macOS: `⌘,` → Extensions; on Windows: gear icon → Extensions).
+3. If there's an **Advanced settings** section, expand it and click **Install Extension…**, then pick the downloaded `.mcpb`. Otherwise, drag the `.mcpb` file from Finder/Explorer onto the Extensions window.
+4. Claude Desktop opens the install dialog described in Step 3.
 
-Double-click the `.mcpb` file. Claude Desktop opens an install dialog with the fields below. Fill the single-account fields **or** use the multi-account escape hatch — not both.
+Side-load warnings to expect:
+
+- **macOS:** Gatekeeper may quarantine the file. Right-click the `.mcpb` in Finder → **Open** the first time, or approve via **System Settings → Privacy & Security → Open Anyway**. Double-clicking the `.mcpb` also works on macOS once allowed.
+- **Windows:** SmartScreen may show *"Windows protected your PC"* for an unknown publisher when the bundle is downloaded. Click **More info → Run anyway** on the download, then continue with the drag-drop method above. Double-clicking the file in Explorer is **not** supported.
+- **Linux:** No warning expected; use drag-drop.
+
+## Step 3 — Fill in the install dialog
+
+In the dialog Claude Desktop opens, fill the single-account fields **or** use the multi-account escape hatch — not both.
 
 ### Single-account install
 
@@ -97,7 +108,7 @@ This file holds plaintext passwords. Treat it like a credential.
 
 ## Step 4 — Verify it works
 
-Have the user open a fresh chat in Claude Desktop and try each:
+Have the user open a fresh **chat or cowork session** in Claude Desktop and try each:
 
 1. *"What meetings do I have today?"* — exercises the calendar surface.
 2. *"Show me my unread emails."* — exercises the email surface.
@@ -112,7 +123,7 @@ If Claude responds with real data, the install is done. If Claude says the tool 
 Claude Desktop does not auto-update side-loaded extensions. To upgrade:
 
 1. Re-download `exchange-mcp-server-latest.mcpb` from the link in Step 1.
-2. Double-click → click **Install**. Saved credentials carry over (the extension name is stable).
+2. Re-install via **Settings → Extensions** the same way as Step 2 (drag-drop or **Install Extension…**) and click **Install** in the dialog. Saved credentials carry over (the extension name is stable).
 
 Confirm the version under **Claude Desktop → Settings → Extensions → Microsoft Exchange**.
 
