@@ -1,7 +1,7 @@
 ---
 name: exchange-mcp-setup
 description: This skill should be used when an INOV8 user wants to install, set up, or configure the Exchange MCP desktop extension to read their INOV8 email, calendar, tasks, or contacts inside Claude Desktop. Triggers on phrases like "install exchange", "set up exchange MCP", "connect my work email to claude", "read outlook in claude desktop", "configure exchange extension", "add inov8 mailbox to claude", "set up exchange in claude", "install the exchange mcp", "connect my outlook to claude", "read INOV8 email in claude", or any request to access work email/calendar from Claude. Walks the user through downloading the .mcpb bundle, installing it in Claude Desktop, configuring single-account or multi-account access against mail.inov8hc.com, verifying it works, and troubleshooting common errors.
-version: 0.2.0
+version: 0.2.1
 ---
 
 # Exchange MCP Setup
@@ -22,30 +22,31 @@ The Exchange MCP server is a Claude Desktop extension that lets Claude read mail
 
 ## Prerequisites
 
-- **Claude Desktop installed.** Not Claude Code (CLI), not claude.ai, not the web UI. The `.mcpb` format only works in Claude Desktop. macOS, Windows, and Linux all supported.
+- **Claude Desktop installed.** Not Claude Code (CLI), not claude.ai, not the web UI. The `.mcpb` format only works in Claude Desktop. Anthropic ships Claude Desktop for **macOS** and **Windows** (incl. ARM64) — see <https://claude.com/download>. Not available on Linux.
 - **First-launch internet access (~30 s).** Claude Desktop's bundled `uv` runtime provisions a Python interpreter and the runtime dependencies on first start. No system Python install required.
 - **INOV8 credentials.** Email, Windows username, NETBIOS domain, password.
 
 ## Step 1 — Download the bundle
 
-One file works on macOS, Windows, and Linux:
+The same file is used on macOS and Windows:
 
 <https://inov8public.z21.web.core.windows.net/ExchangeMCP/exchange-mcp-server-latest.mcpb>
 
 ## Step 2 — Install via Settings → Extensions
 
-The reliable cross-platform method — and the only method on Windows, where Claude Desktop does **not** register the `.mcpb` file association, so double-clicking does nothing:
+This is the canonical install path documented by Anthropic and works the same on every supported platform:
 
 1. Open **Claude Desktop**.
-2. Go to **Settings → Extensions** (on macOS: `⌘,` → Extensions; on Windows: gear icon → Extensions).
-3. If there's an **Advanced settings** section, expand it and click **Install Extension…**, then pick the downloaded `.mcpb`. Otherwise, drag the `.mcpb` file from Finder/Explorer onto the Extensions window.
+2. Open **Settings → Extensions**:
+   - **macOS:** `⌘,` → click **Extensions** in the sidebar.
+   - **Windows:** click the hamburger menu **☰** in the top-left → **File → Settings → Extensions** (or `Ctrl+,`).
+3. Expand **Advanced settings** at the bottom of the Extensions page, find the **Extension Developer** section, and click **Install Extension…**, then pick the downloaded `.mcpb`. Drag-and-drop the `.mcpb` from Finder / File Explorer onto the Extensions window also works.
 4. Claude Desktop opens the install dialog described in Step 3.
 
 Side-load warnings to expect:
 
-- **macOS:** Gatekeeper may quarantine the file. Right-click the `.mcpb` in Finder → **Open** the first time, or approve via **System Settings → Privacy & Security → Open Anyway**. Double-clicking the `.mcpb` also works on macOS once allowed.
-- **Windows:** SmartScreen may show *"Windows protected your PC"* for an unknown publisher when the bundle is downloaded. Click **More info → Run anyway** on the download, then continue with the drag-drop method above. Double-clicking the file in Explorer is **not** supported.
-- **Linux:** No warning expected; use drag-drop.
+- **macOS:** Gatekeeper may quarantine the file. Right-click the `.mcpb` in Finder → **Open** the first time, or approve via **System Settings → Privacy & Security → Open Anyway**. After it's allowed, double-clicking the `.mcpb` in Finder also opens the install dialog directly.
+- **Windows:** SmartScreen may show *"Windows protected your PC"* for an unknown publisher when the bundle is downloaded. Click **More info → Run anyway** on the download, then use the **Settings → Extensions** path above. Double-clicking the `.mcpb` in File Explorer is **not** reliable on Windows — Claude Desktop does not always register the file association — so prefer drag-drop or **Install Extension…**.
 
 ## Step 3 — Fill in the install dialog
 
@@ -101,7 +102,7 @@ Each `name` becomes the account identifier referenced in prompts (*"read my work
 
 Save the file somewhere private and use an absolute path in the install dialog (no `~`). Suggested locations:
 
-- **macOS / Linux:** `/Users/<you>/.exchange-mcp/config.json` — `chmod 600` it.
+- **macOS:** `/Users/<you>/.exchange-mcp/config.json` — `chmod 600` it.
 - **Windows:** `C:\Users\<you>\.exchange-mcp\config.json` — restrict to the user's account.
 
 This file holds plaintext passwords. Treat it like a credential.
@@ -149,7 +150,7 @@ For installation help, bugs, feature requests, or questions: **dbalderree@inov8h
 
 ## Security
 
-- The password is stored in the OS keychain — Keychain on macOS, Credential Manager on Windows, libsecret on Linux. Never written to disk in plaintext by Claude Desktop.
+- The password is stored in the OS keychain — Keychain on macOS, Credential Manager on Windows. Never written to disk in plaintext by Claude Desktop.
 - The extension only opens stdio (to Claude Desktop) and HTTPS (to `mail.inov8hc.com`). No telemetry, no other outbound traffic.
 - The optional multi-account `config.json` **does** store passwords in plaintext. Restrict its permissions and don't commit it.
 

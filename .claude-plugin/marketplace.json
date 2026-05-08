@@ -28,7 +28,7 @@
       "name": "inov8-exchange-skills",
       "source": "./plugins/inov8-exchange-skills",
       "description": "Skill that walks INOV8 users through installing and configuring the Exchange MCP desktop extension (.mcpb) for Claude Desktop",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "category": "productivity",
       "tags": ["exchange", "email", "calendar", "mcpb", "claude-desktop", "outlook", "ews"]
     }
