@@ -1,7 +1,7 @@
 ---
 name: process-interview
 description: This skill should be used when the user asks to "interview me about my process", "interview me about X", "brain dump my workflow", "extract my process", "document this process", "capture this SOP", or invokes "/process-interview". Conducts a structured, multi-phase interview using contextual inquiry, ACTA Knowledge-Audit probes, the Critical Decision Method, and the Critical Incident Technique to extract tacit process knowledge from a subject-matter expert and produce an SOP, runbook, decision flowchart, training module, mistake-prevention checklist, or Cognitive Demands Table. Output is written to Notion when available, with local markdown as fallback.
-version: 0.1.0
+version: 0.2.0
 ---
 
 # Process Interview

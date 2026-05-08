@@ -1,5 +1,6 @@
 ---
 name: tic-lookup
+version: 0.2.0
 description: >
   Transparency in Coverage (TiC) price lookup tool for querying CMS machine-readable
   in-network rate files. Use this skill whenever the user asks about insurance reimbursement

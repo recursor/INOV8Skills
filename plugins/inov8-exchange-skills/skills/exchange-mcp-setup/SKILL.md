@@ -1,7 +1,7 @@
 ---
 name: exchange-mcp-setup
 description: This skill should be used when an INOV8 user wants to install, set up, or configure the Exchange MCP desktop extension to read their INOV8 email, calendar, tasks, or contacts inside Claude Desktop. Triggers on phrases like "install exchange", "set up exchange MCP", "connect my work email to claude", "read outlook in claude desktop", "configure exchange extension", "add inov8 mailbox to claude", "set up exchange in claude", "install the exchange mcp", "connect my outlook to claude", "read INOV8 email in claude", or any request to access work email/calendar from Claude. Walks the user through downloading the .mcpb bundle, installing it in Claude Desktop, configuring single-account or multi-account access against mail.inov8hc.com, verifying it works, and troubleshooting common errors.
-version: 0.1.0
+version: 0.2.0
 ---
 
 # Exchange MCP Setup
