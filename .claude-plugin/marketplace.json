@@ -12,7 +12,7 @@
       "name": "inov8-process-skills",
       "source": "./plugins/inov8-process-skills",
       "description": "Skills for capturing and structuring business process knowledge from subject-matter experts",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "category": "knowledge-management",
       "tags": ["interview", "process", "sop", "knowledge-transfer", "documentation"]
     },

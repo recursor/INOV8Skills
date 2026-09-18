@@ -9,12 +9,12 @@ This repository is a [Claude Code plugin marketplace](https://docs.claude.com/en
 In Claude Code, add the marketplace and install the plugins you want:
 
 ```text
-/plugin marketplace add <git-url-or-local-path-to-this-repo>
+/plugin marketplace add recursor/INOV8Skills
 /plugin install inov8-process-skills@inov8-plugins
 /plugin install transparency-in-coverage-skills@inov8-plugins
 ```
 
-The marketplace can be added by git URL or by local filesystem path. The marketplace identifier is `inov8-plugins` (from `.claude-plugin/marketplace.json`), so install commands use the `@inov8-plugins` suffix even though the repo directory is named `INOV8Skills`.
+The marketplace can also be added by full git URL or by local filesystem path. The marketplace identifier is `inov8-plugins` (from `.claude-plugin/marketplace.json`), so install commands use the `@inov8-plugins` suffix even though the repo directory is named `INOV8Skills`.
 
 To see what's available without installing:
 
@@ -22,11 +22,22 @@ To see what's available without installing:
 /plugin marketplace list inov8-plugins
 ```
 
+### OpenAI Codex
+
+The skills follow the open [Agent Skills](https://learn.chatgpt.com/docs/build-skills) format, so Codex can install them directly from this repo. Inside Codex, run one line per skill, then restart Codex:
+
+```text
+$skill-installer install https://github.com/recursor/INOV8Skills/tree/main/plugins/inov8-process-skills/skills/process-interview
+$skill-installer install https://github.com/recursor/INOV8Skills/tree/main/plugins/transparency-in-coverage-skills/skills/tic-lookup
+```
+
+Without the installer, copy the skill folder into `~/.agents/skills/`. The `exchange-mcp-setup` skill is Claude Desktop-only and is not useful in Codex.
+
 ## Plugins
 
 ### `inov8-process-skills`
 
-- **Version:** 0.1.0
+- **Version:** 0.2.1
 - **Category:** knowledge-management
 - **Description:** Skills for capturing and structuring business process knowledge from subject-matter experts. Turns Claude into a disciplined process knowledge-engineer that runs structured, multi-phase interviews and produces documentation artifacts.
 
@@ -43,7 +54,7 @@ To see what's available without installing:
 
 ### `transparency-in-coverage-skills`
 
-- **Version:** 0.1.0
+- **Version:** 0.2.0
 - **Category:** healthcare
 - **Description:** Skills for indexing and querying CMS Transparency in Coverage (TiC) machine-readable in-network rate files by payer, plan, NPI, and CPT/HCPCS code.
 
@@ -112,6 +123,7 @@ INOV8Skills/
 │       ├── .claude-plugin/plugin.json
 │       └── skills/tic-lookup/SKILL.md
 ├── docs/
+│   ├── agents/                             # Issue-tracker, triage-label, and domain-doc config for engineering skills
 │   └── braindump.md                        # Background reading on tacit-knowledge extraction
 └── README.md
 ```

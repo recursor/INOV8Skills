@@ -1,7 +1,7 @@
 ---
 name: process-interview
 description: This skill should be used when the user asks to "interview me about my process", "interview me about X", "brain dump my workflow", "extract my process", "document this process", "capture this SOP", or invokes "/process-interview". Conducts a structured, multi-phase interview using contextual inquiry, ACTA Knowledge-Audit probes, the Critical Decision Method, and the Critical Incident Technique to extract tacit process knowledge from a subject-matter expert and produce an SOP, runbook, decision flowchart, training module, mistake-prevention checklist, or Cognitive Demands Table. Output is written to Notion when available, with local markdown as fallback.
-version: 0.2.0
+version: 0.2.1
 ---
 
 # Process Interview
@@ -105,7 +105,7 @@ After deep dives are complete (or at the end of each session in multi-session mo
 When writing the working file or the final artifact:
 
 1. **Probe Notion first.** Try a Notion MCP search or list call. If it succeeds, propose creating a page; ask the user for a parent page or workspace location. Do not create top-level pages without explicit permission.
-2. **Authenticate if needed.** If the MCP is installed but not connected, offer to authenticate via `mcp__claude_ai_Notion__authenticate` and resume.
+2. **Authenticate if needed.** If the MCP is installed but not connected, offer to run the Notion MCP's authenticate tool (in Claude Code, `mcp__claude_ai_Notion__authenticate`) and resume.
 3. **Fall back gracefully.** If Notion is unavailable or the user declines, write to a local markdown file in the user's working directory, named after the process (e.g., `customer-refund-process.md`). Use the same section structure and tag conventions.
 4. **Mirror, don't duplicate.** Don't write to both Notion and local — pick one source of truth at the start of Phase 2 and confirm it with the user.
 

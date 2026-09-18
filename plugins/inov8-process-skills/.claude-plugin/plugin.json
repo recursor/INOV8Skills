@@ -1,6 +1,6 @@
 {
   "name": "inov8-process-skills",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Skills for capturing and structuring business process knowledge from subject-matter experts. Includes a structured-interview skill that turns Claude into a disciplined process knowledge-engineer.",
   "author": {
     "name": "INOV8"
