@@ -1,7 +1,7 @@
 {
   "name": "inov8-exchange-skills",
-  "version": "0.2.1",
-  "description": "Skill that walks INOV8 users through installing and configuring the Exchange MCP desktop extension (.mcpb) for Claude Desktop, so chat and cowork can read INOV8 email, calendar, tasks, and contacts on mail.inov8hc.com.",
+  "version": "0.3.0",
+  "description": "Skill that walks INOV8 users through installing and configuring the Exchange MCP desktop extension (.mcpb) for Claude Desktop, so chat and cowork can read INOV8 email, calendar, tasks, and contacts on mail.inov8hc.com, including shared mailboxes and up to three separate logins.",
   "author": {
     "name": "INOV8"
   },

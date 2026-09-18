@@ -47,7 +47,11 @@ The top-level `README.md` has user-facing install/usage docs for each plugin; up
 
 - `inov8-process-skills` — `process-interview` skill: structured SME interview producing SOPs/runbooks, writes to Notion (preferred) or local markdown.
 - `transparency-in-coverage-skills` — `tic-lookup` skill: indexes CMS Transparency in Coverage rate files into SQLite and answers payer/plan/NPI/CPT rate questions.
-- `inov8-exchange-skills` — `exchange-mcp-setup` skill: walks INOV8 users through installing the Exchange MCP `.mcpb` desktop extension in Claude Desktop. Setup-only — the actual Exchange tools live in `recursor/ExchangeMCPServer` and are surfaced via Claude Desktop's chat and cowork modes (not Claude Code, which uses a separate MCP config).
+- `inov8-exchange-skills` — `exchange-mcp-setup` skill: walks INOV8 users through installing the Exchange MCP `.mcpb` desktop extension in Claude Desktop. Setup-only — the actual Exchange tools live in `recursor/INOV8.MCP` under `ExchangeMCPServer/` and are surfaced via Claude Desktop's chat and cowork modes (not Claude Code, which uses a separate MCP config).
+
+## Keeping exchange-mcp-setup in sync with the server
+
+The `exchange-mcp-setup` skill mirrors the install dialog and behaviour of the server in `recursor/INOV8.MCP` (`ExchangeMCPServer/manifest.json` drives the dialog labels, `README.md` the troubleshooting). When that server changes anything user-visible — `user_config` titles or fields, the tool inventory, the download URL, prerequisites, or error messages — update the skill's Step 3 table, Step 4 prompts, Troubleshooting table, and tool inventory to match, and bump the version. The server repo's `CLAUDE.md` names this skill as a release-checklist step.
 
 ## Conventions worth knowing
 
