@@ -58,3 +58,17 @@ The `exchange-mcp-setup` skill mirrors the install dialog and behaviour of the s
 - Skill bodies use **imperative/infinitive form** (verb-first instructions to Claude), and frontmatter `description` uses **third-person** ("This skill should be used when...") with explicit trigger phrases users might type.
 - URLs, field labels, JSON keys, and credential examples in install/setup skills are intentionally verbatim — do not paraphrase them when relaying to users.
 - When the user asks to commit, default to a single commit that bundles the content change *plus* its version bump(s); do not push without an explicit ask.
+
+## Agent skills
+
+### Issue tracker
+
+Issues live in GitHub Issues for `recursor/INOV8Skills`, driven by the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: one `CONTEXT.md` plus `docs/adr/` at the repo root, created lazily by `/domain-modeling`. See `docs/agents/domain.md`.
