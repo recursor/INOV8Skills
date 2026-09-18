@@ -72,23 +72,28 @@ Connect Claude Desktop to an on-premises Microsoft Exchange mailbox so chat and 
 
 | Field | Example | Notes |
 | --- | --- | --- |
-| Exchange server | `mail.contoso.com` | Hostname only — no `https://` |
-| Email address | `you@contoso.com` | Your full email |
-| Windows username | `jdoe` | Without the domain prefix |
-| Windows domain (NETBIOS) | `CONTOSO` | The short AD/NETBIOS name |
-| Password | — | Stored in the OS keychain |
-| Verify SSL | `true` | Set to `false` only for self-signed certs |
-| Timezone (IANA) | `America/Chicago` | Defaults to `UTC` |
+| Account 1 — Exchange server | `mail.contoso.com` | Hostname only — no `https://` |
+| Account 1 — Email address | `you@contoso.com` | Your full email |
+| Account 1 — Username | `you@contoso.com` | Your email again; plain `jdoe` + a Windows domain only if the server rejects that |
+| Account 1 — Windows domain | (blank) | Advanced; usually leave blank |
+| Account 1 — Password | — | Stored in the OS keychain |
+| Account 1 — Verify SSL | `true` | Set to `false` only for self-signed certs |
+| Account 1 — Timezone (IANA) | `America/Chicago` | Defaults to `UTC` |
+| Additional mailboxes | `billing@contoso.com` | Shared mailboxes your login can already open, comma-separated |
 
 ### Multiple mailboxes
 
-Leave the single-account fields blank and set **Multi-account config file** to the absolute path of a `config.json` whose `accounts` array describes each mailbox. See the schema in the [`ExchangeMCPServer` README](https://github.com/recursor/ExchangeMCPServer#readme).
+- **Same login, more mailboxes:** list them in **Additional mailboxes**.
+- **A second or third login:** fill in the **Account 2 —** and **Account 3 —** fields.
+- **Four or more logins:** leave the Account fields blank and set **Multi-account config file** to the absolute path of a `config.json` whose `accounts` array describes each mailbox. See the schema in the [Exchange MCP Server README](https://github.com/recursor/INOV8.MCP/blob/main/ExchangeMCPServer/README.md).
+
+Run the `exchange-mcp-setup` skill (`/plugin install inov8-exchange-skills@inov8-plugins`, then ask Claude to "set up exchange") for a guided walkthrough.
 
 ### Source and support
 
-The extension is built from [`recursor/ExchangeMCPServer`](https://github.com/recursor/ExchangeMCPServer). Report issues there.
+The extension is built from [`recursor/INOV8.MCP`](https://github.com/recursor/INOV8.MCP/tree/main/ExchangeMCPServer) (`ExchangeMCPServer/`). Report issues there.
 
-> **Claude Code users:** Claude Desktop and Claude Code use separate MCP configurations. To use the same Exchange server in Claude Code, register the `uv` invocation in your Claude Code MCP config — see the [`ExchangeMCPServer` README](https://github.com/recursor/ExchangeMCPServer#readme) for the command. There is no Exchange plugin in this marketplace.
+> **Claude Code users:** Claude Desktop and Claude Code use separate MCP configurations. To use the same Exchange server in Claude Code, register the `uv` invocation in your Claude Code MCP config — see the [Exchange MCP Server README](https://github.com/recursor/INOV8.MCP/blob/main/ExchangeMCPServer/README.md) for the command. The `inov8-exchange-skills` plugin here only covers the Claude Desktop install.
 
 ## Repository layout
 
@@ -97,6 +102,9 @@ INOV8Skills/
 ├── .claude-plugin/
 │   └── marketplace.json                    # Marketplace manifest (id: inov8-plugins)
 ├── plugins/
+│   ├── inov8-exchange-skills/
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── skills/exchange-mcp-setup/SKILL.md
 │   ├── inov8-process-skills/
 │   │   ├── .claude-plugin/plugin.json
 │   │   └── skills/process-interview/SKILL.md
