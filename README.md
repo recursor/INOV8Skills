@@ -14,6 +14,7 @@ In Claude Code, add the marketplace and install the plugins you want:
 /plugin install transparency-in-coverage-skills@inov8-plugins
 /plugin install inov8-exchange-skills@inov8-plugins
 /plugin install inov8-credentialing-skills@inov8-plugins
+/plugin install inov8-design-skills@inov8-plugins
 ```
 
 The marketplace can also be added by full git URL or by local filesystem path. The marketplace identifier is `inov8-plugins` (from `.claude-plugin/marketplace.json`), so install commands use the `@inov8-plugins` suffix even though the repo directory is named `INOV8Skills`.
@@ -31,6 +32,7 @@ The skills follow the open [Agent Skills](https://learn.chatgpt.com/docs/build-s
 ```text
 $skill-installer install https://github.com/recursor/INOV8Skills/tree/main/plugins/inov8-process-skills/skills/process-interview
 $skill-installer install https://github.com/recursor/INOV8Skills/tree/main/plugins/transparency-in-coverage-skills/skills/tic-lookup
+$skill-installer install https://github.com/recursor/INOV8Skills/tree/main/plugins/inov8-design-skills/skills/inov8-orthopedics-design
 ```
 
 Without the installer, copy the skill folder into `~/.agents/skills/`. The `exchange-mcp-setup` skill is Claude Desktop-only and is not useful in Codex.
@@ -70,6 +72,22 @@ Without the installer, copy the skill folder into `~/.agents/skills/`. The `exch
 - "compare facility rates for CPT 27447"
 - "look up in-network rates for [payer/plan/NPI]"
 - Anything mentioning TiC files, price transparency, or negotiated rates
+
+### `inov8-design-skills`
+
+- **Version:** 0.1.0
+- **Category:** design
+- **Description:** Skill that fetches the INOV8 Orthopedics design system from the public [`recursor/Design`](https://github.com/recursor/Design) repository and enforces its brand rules, tokens, and component patterns whenever Claude designs or builds INOV8-branded output.
+
+**Skills:**
+
+- **[`inov8-orthopedics-design`](plugins/inov8-design-skills/skills/inov8-orthopedics-design/SKILL.md)** — Clones or fetches `systems/inov8-orthopedics/` from `recursor/Design`, follows that system's own `SKILL.md` (brand book, `tokens.css`, `tokens.json`, component cards and previews), and carries a fallback summary of the hard rules for when the fetch fails. Works in Claude Code and, via `$skill-installer`, in Codex; Codex users can also install the system's own skill straight from the Design repo.
+
+**Example trigger phrases:**
+
+- "make this look like INOV8"
+- "INOV8 design system" / "INOV8 colors" / "use our brand"
+- "build an INOV8 Orthopedics landing page"
 
 ## Microsoft Exchange (Claude Desktop)
 
@@ -148,6 +166,9 @@ INOV8Skills/
 │   ├── inov8-credentialing-skills/
 │   │   ├── .claude-plugin/plugin.json
 │   │   └── skills/case-log-mcp-setup/SKILL.md
+│   ├── inov8-design-skills/
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── skills/inov8-orthopedics-design/SKILL.md
 │   ├── inov8-exchange-skills/
 │   │   ├── .claude-plugin/plugin.json
 │   │   └── skills/exchange-mcp-setup/SKILL.md

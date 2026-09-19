@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "INOV8's collection of Claude plugins",
-    "version": "0.3.0"
+    "version": "0.4.0"
   },
   "plugins": [
     {
@@ -14,7 +14,13 @@
       "description": "Skills for capturing and structuring business process knowledge from subject-matter experts",
       "version": "0.2.1",
       "category": "knowledge-management",
-      "tags": ["interview", "process", "sop", "knowledge-transfer", "documentation"]
+      "tags": [
+        "interview",
+        "process",
+        "sop",
+        "knowledge-transfer",
+        "documentation"
+      ]
     },
     {
       "name": "transparency-in-coverage-skills",
@@ -22,7 +28,14 @@
       "description": "Skills for indexing and querying CMS Transparency in Coverage (TiC) in-network rate files by payer, plan, NPI, and CPT/HCPCS code",
       "version": "0.2.0",
       "category": "healthcare",
-      "tags": ["transparency-in-coverage", "tic", "healthcare", "price-transparency", "cms", "rates"]
+      "tags": [
+        "transparency-in-coverage",
+        "tic",
+        "healthcare",
+        "price-transparency",
+        "cms",
+        "rates"
+      ]
     },
     {
       "name": "inov8-exchange-skills",
@@ -30,7 +43,15 @@
       "description": "Skill that walks INOV8 users through installing and configuring the Exchange MCP desktop extension (.mcpb) for Claude Desktop, including shared mailboxes and extra logins",
       "version": "0.3.0",
       "category": "productivity",
-      "tags": ["exchange", "email", "calendar", "mcpb", "claude-desktop", "outlook", "ews"]
+      "tags": [
+        "exchange",
+        "email",
+        "calendar",
+        "mcpb",
+        "claude-desktop",
+        "outlook",
+        "ews"
+      ]
     },
     {
       "name": "inov8-credentialing-skills",
@@ -38,7 +59,32 @@
       "description": "Skill that walks INOV8 users through installing and configuring the Case Log MCP desktop extension (.mcpb) for Claude Desktop, to produce a physician's credentialing case log by NPI",
       "version": "0.1.0",
       "category": "credentialing",
-      "tags": ["caselog", "credentialing", "npi", "case-log", "mcpb", "claude-desktop", "excel", "pdf"]
+      "tags": [
+        "caselog",
+        "credentialing",
+        "npi",
+        "case-log",
+        "mcpb",
+        "claude-desktop",
+        "excel",
+        "pdf"
+      ]
+    },
+    {
+      "name": "inov8-design-skills",
+      "source": "./plugins/inov8-design-skills",
+      "description": "Skill that fetches the INOV8 Orthopedics design system from recursor/Design and enforces its brand rules, tokens, and component patterns for any INOV8-branded design or UI work",
+      "version": "0.1.0",
+      "category": "design",
+      "tags": [
+        "design-system",
+        "branding",
+        "inov8",
+        "orthopedics",
+        "tokens",
+        "ui",
+        "frontend"
+      ]
     }
   ]
 }

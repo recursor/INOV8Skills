@@ -1,0 +1,10 @@
+{
+  "name": "inov8-design-skills",
+  "version": "0.1.0",
+  "description": "Skill that fetches the INOV8 Orthopedics design system from recursor/Design and enforces its brand rules, tokens, and component patterns whenever Claude designs or builds INOV8-branded output.",
+  "author": {
+    "name": "INOV8"
+  },
+  "keywords": ["design-system", "branding", "inov8", "orthopedics", "tokens", "ui", "frontend"],
+  "license": "MIT"
+}
