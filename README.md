@@ -12,6 +12,8 @@ In Claude Code, add the marketplace and install the plugins you want:
 /plugin marketplace add recursor/INOV8Skills
 /plugin install inov8-process-skills@inov8-plugins
 /plugin install transparency-in-coverage-skills@inov8-plugins
+/plugin install inov8-exchange-skills@inov8-plugins
+/plugin install inov8-credentialing-skills@inov8-plugins
 ```
 
 The marketplace can also be added by full git URL or by local filesystem path. The marketplace identifier is `inov8-plugins` (from `.claude-plugin/marketplace.json`), so install commands use the `@inov8-plugins` suffix even though the repo directory is named `INOV8Skills`.
@@ -106,6 +108,36 @@ The extension is built from [`recursor/INOV8.MCP`](https://github.com/recursor/I
 
 > **Claude Code users:** Claude Desktop and Claude Code use separate MCP configurations. To use the same Exchange server in Claude Code, register the `uv` invocation in your Claude Code MCP config — see the [Exchange MCP Server README](https://github.com/recursor/INOV8.MCP/blob/main/ExchangeMCPServer/README.md) for the command. The `inov8-exchange-skills` plugin here only covers the Claude Desktop install.
 
+## INOV8 Case Logs (Claude Desktop)
+
+Fetches one physician's case log from INOV8Functions by NPI and renders the credentialing artifacts — an `.xlsx` workbook with **Schedule** and **Operative** tabs, plus one landscape PDF per non-empty tab — on your own machine. Distributed as a Claude Desktop extension (`.mcpb`) — no terminal, no Docker, no Python install required. The underlying rows never flow through the model; only counts and file paths are returned.
+
+### Install
+
+1. Download [`caselog-mcp-server-latest.mcpb`](https://inov8public.z21.web.core.windows.net/CaseLogMCP/caselog-mcp-server-latest.mcpb).
+2. In Claude Desktop, open **Settings → Extensions** and drag the `.mcpb` file onto the window.
+3. Fill in the three fields below and click **Install**.
+
+### What you'll need
+
+| Field | What to enter | Notes |
+| --- | --- | --- |
+| Function key | The key provided by INOV8 IT | Sensitive. Stored in the OS keychain. |
+| Endpoint base URL | Leave the default | Defaults to `https://inov8functions.azurewebsites.net/api/`. |
+| Output folder | Leave the default, or pick a folder | Defaults to `~/Documents/CaseLogs`. |
+
+### Producing a case log
+
+Run the `case-log-mcp-setup` skill (`/plugin install inov8-credentialing-skills@inov8-plugins`, then ask Claude to "set up case logs") for a guided walkthrough, or once installed just ask Claude something like *"run a case log for NPI 1234567890"* (an optional `yyyy-MM-dd`–`yyyy-MM-dd` range; default is three years back through today).
+
+Claude relays the Schedule and Operative row counts and the absolute file paths verbatim — never the rows themselves. A count of `0` means that tab and its PDF were omitted (a non-surgeon with zero Operative rows is expected; a surgeon with zero Operative rows means the NPI should be re-verified).
+
+### Source and support
+
+The extension is built from [`recursor/INOV8.MCP`](https://github.com/recursor/INOV8.MCP/tree/main/CaseLogMCPServer) (`CaseLogMCPServer/`). Report issues there.
+
+> **Claude Code users:** Claude Desktop and Claude Code use separate MCP configurations. To use the same Case Log server in Claude Code, see [Option D of the Case Log MCP Server README](https://github.com/recursor/INOV8.MCP/blob/main/CaseLogMCPServer/README.md#option-d-other-mcp-clients-codex-and-any-stdio-client) for the command. The `inov8-credentialing-skills` plugin here only covers the Claude Desktop install.
+
 ## Repository layout
 
 ```text
@@ -113,6 +145,9 @@ INOV8Skills/
 ├── .claude-plugin/
 │   └── marketplace.json                    # Marketplace manifest (id: inov8-plugins)
 ├── plugins/
+│   ├── inov8-credentialing-skills/
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── skills/case-log-mcp-setup/SKILL.md
 │   ├── inov8-exchange-skills/
 │   │   ├── .claude-plugin/plugin.json
 │   │   └── skills/exchange-mcp-setup/SKILL.md
