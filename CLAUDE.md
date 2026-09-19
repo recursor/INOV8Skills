@@ -49,6 +49,11 @@ The top-level `README.md` has user-facing install/usage docs for each plugin; up
 - `transparency-in-coverage-skills` — `tic-lookup` skill: indexes CMS Transparency in Coverage rate files into SQLite and answers payer/plan/NPI/CPT rate questions.
 - `inov8-exchange-skills` — `exchange-mcp-setup` skill: walks INOV8 users through installing the Exchange MCP `.mcpb` desktop extension in Claude Desktop. Setup-only — the actual Exchange tools live in `recursor/INOV8.MCP` under `ExchangeMCPServer/` and are surfaced via Claude Desktop's chat and cowork modes (not Claude Code, which uses a separate MCP config).
 - `inov8-credentialing-skills` — `case-log-mcp-setup` skill: walks INOV8 users through installing the Case Log MCP `.mcpb` desktop extension in Claude Desktop, then through producing and reading a physician's credentialing case log by NPI. Setup-only — the actual rendering lives in `recursor/INOV8.MCP` under `CaseLogMCPServer/` and is surfaced via Claude Desktop's chat and cowork modes (not Claude Code, which uses a separate MCP config).
+- `inov8-design-skills` — `inov8-orthopedics-design` skill: fetches the INOV8 Orthopedics design system from the public `recursor/Design` repo (`systems/inov8-orthopedics/`) and follows that system's own `SKILL.md`; carries a fallback summary of the brand's hard rules.
+
+## Keeping inov8-orthopedics-design in sync with the Design repo
+
+The `inov8-orthopedics-design` skill is a pointer: the design system itself lives in `recursor/Design` under `systems/inov8-orthopedics/`, mirrored from its Claude artifact, with its own `SKILL.md`. This skill's fallback hard-rules list, token names, and file paths mirror that file. When the Design repo's `SKILL.md` or README changes a rule, a token name, or a path named here, update this skill and bump its version.
 
 ## Keeping exchange-mcp-setup in sync with the server
 
