@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "INOV8's collection of Claude plugins",
-    "version": "0.2.0"
+    "version": "0.3.0"
   },
   "plugins": [
     {
@@ -31,6 +31,14 @@
       "version": "0.3.0",
       "category": "productivity",
       "tags": ["exchange", "email", "calendar", "mcpb", "claude-desktop", "outlook", "ews"]
+    },
+    {
+      "name": "inov8-credentialing-skills",
+      "source": "./plugins/inov8-credentialing-skills",
+      "description": "Skill that walks INOV8 users through installing and configuring the Case Log MCP desktop extension (.mcpb) for Claude Desktop, to produce a physician's credentialing case log by NPI",
+      "version": "0.1.0",
+      "category": "credentialing",
+      "tags": ["caselog", "credentialing", "npi", "case-log", "mcpb", "claude-desktop", "excel", "pdf"]
     }
   ]
 }

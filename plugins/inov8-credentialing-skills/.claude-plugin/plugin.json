@@ -1,0 +1,10 @@
+{
+  "name": "inov8-credentialing-skills",
+  "version": "0.1.0",
+  "description": "Skill that walks INOV8 users through installing and configuring the Case Log MCP desktop extension (.mcpb) for Claude Desktop, so chat and cowork can produce a physician's credentialing case log (Schedule and Operative workbook plus PDFs) by NPI.",
+  "author": {
+    "name": "INOV8"
+  },
+  "keywords": ["caselog", "credentialing", "npi", "case-log", "mcpb", "claude-desktop", "excel", "pdf"],
+  "license": "MIT"
+}
