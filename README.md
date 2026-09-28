@@ -77,11 +77,11 @@ Without the installer, copy the skill folder into `~/.agents/skills/`. The `exch
 
 - **Version:** 0.1.0
 - **Category:** design
-- **Description:** Skill that fetches the INOV8 Orthopedics design system from the public [`recursor/Design`](https://github.com/recursor/Design) repository and enforces its brand rules, tokens, and component patterns whenever Claude designs or builds INOV8-branded output.
+- **Description:** Skill that fetches the INOV8 Orthopedics design system from the public [`recursor/INOV8.Design`](https://github.com/recursor/INOV8.Design) repository and enforces its brand rules, tokens, and component patterns whenever Claude designs or builds INOV8-branded output.
 
 **Skills:**
 
-- **[`inov8-orthopedics-design`](plugins/inov8-design-skills/skills/inov8-orthopedics-design/SKILL.md)** — Clones or fetches `systems/inov8-orthopedics/` from `recursor/Design`, follows that system's own `SKILL.md` (brand book, `tokens.css`, `tokens.json`, component cards and previews), and carries a fallback summary of the hard rules for when the fetch fails. Works in Claude Code and, via `$skill-installer`, in Codex; Codex users can also install the system's own skill straight from the Design repo.
+- **[`inov8-orthopedics-design`](plugins/inov8-design-skills/skills/inov8-orthopedics-design/SKILL.md)** — Clones or fetches `systems/inov8-orthopedics/` from `recursor/INOV8.Design`, follows that system's own `SKILL.md` (brand book, `tokens.css`, `tokens.json`, component cards and previews), and carries a fallback summary of the hard rules for when the fetch fails. Works in Claude Code and, via `$skill-installer`, in Codex; Codex users can also install the system's own skill straight from the INOV8.Design repo.
 
 **Example trigger phrases:**
 
