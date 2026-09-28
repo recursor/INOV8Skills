@@ -1,26 +1,26 @@
 ---
 name: inov8-orthopedics-design
-description: This skill should be used when the user wants to design, prototype, or build anything branded for INOV8 Orthopedics or INOV8 Surgical (Houston, TX), such as a web page, slide, mock, email, form, dashboard, or production UI. Triggers on phrases like "INOV8 branding", "make this look like INOV8", "INOV8 design system", "INOV8 colors", "INOV8 Orthopedics page", "use our brand", or any request for INOV8-branded output. Fetches the INOV8 Orthopedics design system from the public recursor/Design repository, reads its brand book and tokens, and enforces the brand's hard rules while designing.
-version: 0.1.0
+description: This skill should be used when the user wants to design, prototype, or build anything branded for INOV8 Orthopedics or INOV8 Surgical (Houston, TX), such as a web page, slide, mock, email, form, dashboard, or production UI. Triggers on phrases like "INOV8 branding", "make this look like INOV8", "INOV8 design system", "INOV8 colors", "INOV8 Orthopedics page", "use our brand", or any request for INOV8-branded output. Fetches the INOV8 Orthopedics design system from the public recursor/INOV8.Design repository, reads its brand book and tokens, and enforces the brand's hard rules while designing.
+version: 0.1.1
 ---
 
 # INOV8 Orthopedics design
 
-Design with the INOV8 Orthopedics design system rather than from memory. The system lives in the public repository `recursor/Design` under `systems/inov8-orthopedics/`; this skill fetches it and follows its own `SKILL.md`.
+Design with the INOV8 Orthopedics design system rather than from memory. The system lives in the public repository `recursor/INOV8.Design` under `systems/inov8-orthopedics/`; this skill fetches it and follows its own `SKILL.md`.
 
 ## Step 1 — Get the system
 
-Check for an existing checkout first: a directory named `Design` beside the current project, or any path the user names. Otherwise clone it into a scratch location:
+Check for an existing checkout first: a directory named `INOV8.Design` (or `Design`, its name before the rename) beside the current project, or any path the user names. Otherwise clone it into a scratch location:
 
 ```bash
-git clone --depth 1 https://github.com/recursor/Design.git <scratch>/Design
+git clone --depth 1 https://github.com/recursor/INOV8.Design.git <scratch>/INOV8.Design
 ```
 
 If cloning is impossible (no network, no git), fetch the two files that matter most directly:
 
 ```bash
-curl -sL https://raw.githubusercontent.com/recursor/Design/main/systems/inov8-orthopedics/README.md
-curl -sL https://raw.githubusercontent.com/recursor/Design/main/systems/inov8-orthopedics/tokens.css
+curl -sL https://raw.githubusercontent.com/recursor/INOV8.Design/main/systems/inov8-orthopedics/README.md
+curl -sL https://raw.githubusercontent.com/recursor/INOV8.Design/main/systems/inov8-orthopedics/tokens.css
 ```
 
 If neither works, say so, then design from the hard rules in Step 3 only and tell the user the token values were not loaded.
@@ -47,4 +47,4 @@ Use the token variables and component classes from the checkout, never retyped v
 
 ## Keeping this skill in sync
 
-The hard rules above mirror `systems/inov8-orthopedics/SKILL.md` in `recursor/Design`. When that file or the system's README changes a rule, a token name, or a file path named here, update this skill and bump its version in the three places this repo's `CLAUDE.md` lists.
+The hard rules above mirror `systems/inov8-orthopedics/SKILL.md` in `recursor/INOV8.Design`. When that file or the system's README changes a rule, a token name, or a file path named here, update this skill and bump its version in the three places this repo's `CLAUDE.md` lists.
